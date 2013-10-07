@@ -1,15 +1,14 @@
 var credentials = require('./credentials.js');
-	util = require('util'),
-	twitter = require('twitter'),
-	express = require('express'),
-	http = require('http');
+var	util = require('util');
+var	twitter = require('twitter');
+var	express = require('express');
+var	http = require('http');
+var path = require('path');
 
 var app = express();
 
-var DatabaseConnection = require('./mongo.js').DatabaseConnection,
-	mongoHost = 'localhost',
-	mongoPort = 27017,
-	dbConnection = new DatabaseConnection(mongoHost, mongoPort);
+var Mongo = require('./mongo.js');
+var	db = new Mongo('localhost', 27017);
 
 var port = 8000;
 
@@ -20,25 +19,24 @@ var twit = new twitter({
     access_token_secret: credentials.access_token_secret
 });
 	
-//app.use(express.static(__dirname + '/public'));
-app.use(express.logger());
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.logger('dev'));
 
-app.get('/', function(req, res){
-	dbConnection.findAll(function(err, data){
-		//console.log(data);
-		res.send(data);
+app.get('/getAll', function(req, res){
+	db.findAll(function(err, data){
+		res.json(data);
 	});
 });
 
-//The convenience APIs aren't finished, but you can get started with the basics://
+/*//The convenience APIs aren't finished, but you can get started with the basics://
 twit.get('/statuses/show/27593302936.json', {include_entities:true}, function(data) {
     //console.log(util.inspect(data));
 	console.log("Status retrieved from Twitter");
-	dbConnection.insert(data, function(err, res){
+	db.insert(data, function(err, res){
 		if(err)console.log(err);
 		else console.log("Success inserting to database");
 	});
-});
+});*/
 
 //Note that all functions may be chained//
 /*
