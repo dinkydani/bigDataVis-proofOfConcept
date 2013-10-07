@@ -1,27 +1,10 @@
-/*var mongo = require('mongodb'),	
-	mongoUri = "mongodb://localhost:27017/proofofconcept";
-
-//module.exports = function (){
-var connection = function(){
-	mongo.Db.connect(mongoUri, function (err, db){
-		if(!err){
-			console.log("Connected to " + mongoUri);
-		}
-	});
-}
-
-module.exports = connection();
-//}
-*/
-
-
 var mongo = require('mongodb');
-var Server = mongo.Server,
-	Db = mongo.Db,
-	Connection = mongo.Connection,
-	BSON = mongo.BSON;
+var Server = mongo.Server;
+var	Db = mongo.Db;
+var	Connection = mongo.Connection;
+var	BSON = mongo.BSON;
 
-DatabaseConnection = function(host, port) {
+var DatabaseConnection = function(host, port) {
   this.db = new Db('proofofconcept', new Server(host, port, {safe: true}, {auto_reconnect: true}, {}));
   this.db.open(function(err, db){
 	if(!err){
@@ -75,4 +58,4 @@ DatabaseConnection.prototype.insert = function(data, callback){
 	});
 };
 
-exports.DatabaseConnection = DatabaseConnection;
+module.exports = DatabaseConnection;
