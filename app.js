@@ -41,11 +41,10 @@ app.get('/getAll', function(req, res){
 
 //The convenience APIs aren't finished, but you can get started with the basics://
 twit.get('/statuses/show/27593302936.json', {include_entities:true}, function(data) {
-    console.log(util.inspect(JSON.stringify(data)));
-	// db.upsert(data, function(err, res){
-	// 	if(err)console.warn(err.message);
-	// 	else console.log("Success inserting status into database");
-	// });
+	db.upsert(data, function(err, res){
+		if(err)console.warn(err.message);
+		else console.log("Success inserting status into database");
+	});
 });
 
 //Note that all functions may be chained//
