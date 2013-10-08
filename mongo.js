@@ -1,11 +1,13 @@
 var mongodb = require('mongodb');
 var connect = require('connect');
+var db = null;
 
-var DatabaseConnection = function(uri){
-	mongodb.Db.connect(uri, { server: { auto_reconnect: true, safe: false } }, function (err, db) {
-		if(!err){
-		console.log("Connected to " + uri);
-	}
+var DatabaseConnection = function(mongoUri){
+	mongodb.Db.connect(mongoUri, { server: { auto_reconnect: true, safe: false } }, function (err, database) {
+		if(!err) console.log("Connected to " + mongoUri);
+		if(err) throw err;
+
+		db = database;
 	});
 }
 
@@ -26,32 +28,45 @@ var DatabaseConnection = function(host, port) {
 */
 //get the collection
 DatabaseConnection.prototype.getCollection = function(callback) {
-  this.db.collection('status', function(error, collection) {
-    if( error ) callback(error);
-    else callback(null, collection);
-  });
+	db.collection('status', function(err, collection) {
+		if( err ) callback(err);
+    	else callback(null, collection);
+	});
 };
 
 //find all statuses
 DatabaseConnection.prototype.findAll = function(callback) {
-    this.getCollection(function(error, collection) {
-      if( error ) callback(error)
+    this.getCollection(function(err, collection) {
+      if( err ) callback(err)
       else {
-        collection.find().toArray(function(error, results) {
-          if( error ) callback(error)
-          else callback(null, results)
+        collection.find().toArray(function(err, object) {
+          	if( err ) {
+          		console.warn(err.message);
+          		callback(err);
+          	}
+          	else {
+          		console.log("findAll successful");
+          		callback(null, object);
+          	}
         });
       }
     });
 };
 
-DatabaseConnection.prototype.insertUpdate = function(data, callback){
-	this.getCollection(function(error, collection){
-		if(error) callback(error);
+DatabaseConnection.prototype.upsert = function(data, callback){
+	console.log(data.id);
+	this.getCollection(function(err, collection){
+		if(err) callback(err);
 		else{
-			collection.update(data,{upsert:true},function(error, result){
-				if(error) callback(error)
-				else callback(null, result)
+			collection.update({"id":data.id}, {$set: data}, {upsert:true}, function(err, object){
+				if( err ) {
+	          		console.warn(err.message);
+	          		callback(err);
+	          	}
+	          	else {
+	          		console.log("Upsert successful");
+	          		callback(null, object);
+	          	}
 			});
 		}
 	});
