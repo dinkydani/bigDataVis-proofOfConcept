@@ -1,4 +1,4 @@
-var credentials = require('./credentials.js');
+//var credentials = require('./credentials.js');
 var	util = require('util');
 var	twitter = require('twitter');
 var	express = require('express');
@@ -13,19 +13,19 @@ var	db = new Mongo(uri);
 
 var port = process.env.PORT || 8000;
 
-var twit = new twitter({
+/*var twit = new twitter({
     consumer_key: credentials.consumer_key,
     consumer_secret: credentials.consumer_secret,
     access_token_key: credentials.access_token_key,
     access_token_secret: credentials.access_token_secret
-});
+});*/
 
-/*var twit = new twitter({
+var twit = new twitter({
     consumer_key: process.env.CONSUMER_KEY,
     consumer_secret: process.env.CONSUMER_SECRET,
     access_token_key: process.env.ACCESS_TOKEN_KEY,
     access_token_secret: process.env.ACCESS_TOKEN_SECRET
-});*/
+});
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.logger('dev'));
