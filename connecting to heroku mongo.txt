@@ -1,0 +1,1 @@
+/c/mongo/bin/mongo ds049558.mongolab.com:49558/heroku_app18544695 -u su -p 
