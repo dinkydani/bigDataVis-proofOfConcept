@@ -19,13 +19,14 @@ var port = process.env.PORT || 8000;
 //     access_token_key: credentials.access_token_key,
 //     access_token_secret: credentials.access_token_secret
 // });
+
 var twit = new twitter({
-    consumer_secret: process.env.CONSUMER_KEY,
+    consumer_key: process.env.CONSUMER_KEY,
     consumer_secret: process.env.CONSUMER_SECRET,
     access_token_key: process.env.ACCESS_TOKEN_KEY,
     access_token_secret: process.env.ACCESS_TOKEN_SECRET
 });
-	
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.logger('dev'));
 
@@ -38,7 +39,8 @@ app.get('/getAll', function(req, res){
 //The convenience APIs aren't finished, but you can get started with the basics://
 twit.get('/statuses/show/27593302936.json', {include_entities:true}, function(data) {
     //console.log(util.inspect(data));
-	console.log("Status retrieved from Twitter");
+	console.log("Retrieving status from Twitter");
+    console.log(process.env.CONSUMER_KEY);
     console.log(data);
 	/*db.insert(data, function(err, res){
 		if(err)console.log(err);
