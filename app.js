@@ -1,4 +1,4 @@
-var credentials = require('./credentials.js');
+// var credentials = require('./credentials.js');
 var	util = require('util');
 var	twitter = require('twitter');
 var	express = require('express');
@@ -8,15 +8,22 @@ var path = require('path');
 var app = express();
 
 var Mongo = require('./mongo.js');
-var	db = new Mongo('localhost', 27017);
+var uri = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/proofofconcept';
+var	db = new Mongo(uri);
 
-var port = 8000;
+var port = process.env.PORT || 8000;
 
+// var twit = new twitter({
+//     consumer_key: credentials.consumer_key,
+//     consumer_secret: credentials.consumer_secret,
+//     access_token_key: credentials.access_token_key,
+//     access_token_secret: credentials.access_token_secret
+// });
 var twit = new twitter({
-    consumer_key: credentials.consumer_key,
-    consumer_secret: credentials.consumer_secret,
-    access_token_key: credentials.access_token_key,
-    access_token_secret: credentials.access_token_secret
+    consumer_secret: process.env.CONSUMER_KEY,
+    consumer_secret: process.env.CONSUMER_SECRET,
+    access_token_key: process.env.ACCESS_TOKEN_KEY,
+    access_token_secret: process.env.ACCESS_TOKEN_SECRET
 });
 	
 app.use(express.static(path.join(__dirname, 'public')));
@@ -28,15 +35,16 @@ app.get('/getAll', function(req, res){
 	});
 });
 
-/*//The convenience APIs aren't finished, but you can get started with the basics://
+//The convenience APIs aren't finished, but you can get started with the basics://
 twit.get('/statuses/show/27593302936.json', {include_entities:true}, function(data) {
     //console.log(util.inspect(data));
 	console.log("Status retrieved from Twitter");
-	db.insert(data, function(err, res){
+    console.log(data);
+	/*db.insert(data, function(err, res){
 		if(err)console.log(err);
 		else console.log("Success inserting to database");
-	});
-});*/
+	});*/
+});
 
 //Note that all functions may be chained//
 /*

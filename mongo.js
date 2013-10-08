@@ -1,8 +1,19 @@
-var mongo = require('mongodb');
-var Server = mongo.Server;
-var	Db = mongo.Db;
-var	Connection = mongo.Connection;
-var	BSON = mongo.BSON;
+var mongodb = require('mongodb');
+var connect = require('connect');
+
+var DatabaseConnection = function(uri){
+	mongodb.Db.connect(uri, { server: { auto_reconnect: true, safe: false } }, function (err, db) {
+		if(!err){
+		console.log("Connected to " + uri);
+	}
+	});
+}
+
+/*var Db = require('mongodb').Db;
+var Connection = require('mongodb').Connection;
+var Server = require('mongodb').Server;
+var BSON = require('mongodb').BSON;
+var ObjectID = require('mongodb').ObjectID;
 
 var DatabaseConnection = function(host, port) {
   this.db = new Db('proofofconcept', new Server(host, port, {safe: true}, {auto_reconnect: true}, {}));
@@ -12,7 +23,7 @@ var DatabaseConnection = function(host, port) {
 	}
   });
 };
-
+*/
 //get the collection
 DatabaseConnection.prototype.getCollection = function(callback) {
   this.db.collection('status', function(error, collection) {
